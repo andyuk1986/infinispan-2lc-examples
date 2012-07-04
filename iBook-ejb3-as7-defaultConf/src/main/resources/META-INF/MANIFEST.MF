@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Built-By: anna.manukyan
+Build-Jdk: 1.7.0_04
+Dependencies: org.jboss.as.naming export,

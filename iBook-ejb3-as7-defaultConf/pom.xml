@@ -1,0 +1,158 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>iBook</groupId>
+	<artifactId>iBook</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<name>iBook</name>
+	<url>http://maven.apache.org</url>
+
+	<repositories>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+        </repository>
+		<repository>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public Maven Repository Group</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+        <repository>
+			<id>LocalRepo</id>
+			<name>LocalRepo</name>
+			<url>file:///${project.basedir}/lib/</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<deploy.path>/usr/share/apache-tomcat-7.0.27/webapps/</deploy.path>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<!--<version>4.1.3.Final</version>-->
+            <version>3.6.10.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.12.1.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec</groupId>
+			<artifactId>jboss-javaee-6.0</artifactId>
+			<version>3.0.0.Final</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.jboss.ejb3</groupId>
+            <artifactId>jboss-ejb3-ext-api</artifactId>
+            <version>2.0.0-beta-2</version>
+        </dependency>
+       <dependency>
+            <groupId>jboss</groupId>
+            <artifactId>jboss-annotations-ejb3</artifactId>
+            <version>4.2.2.GA</version>
+        </dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-infinispan</artifactId>
+			<version>4.1.3.Final</version>
+		</dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+	<build>
+		<finalName>iBook</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-a-jar</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <jarName>iBook</jarName>
+                            <outputDirectory>
+                                ${project.basedir}/target/iBook/WEB-INF/lib/
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<!-- Java EE 6 doesn't require web.xml, Maven needs to catch up! -->
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+                    <packagingExcludes>**/iBook/ejb/**/*.class,**/iBook/domain/**/*.class,**/persistence.xml</packagingExcludes>
+                    <archive>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+				</configuration>
+			</plugin>
+			<!-- JBoss AS plugin to deploy war -->
+			<plugin>
+				<groupId>org.jboss.as.plugins</groupId>
+				<artifactId>jboss-as-maven-plugin</artifactId>
+				<version>7.1.1.Final</version>
+<!--                <configuration>
+                    <port>10099</port>
+                </configuration>-->
+			</plugin>
+			<!-- Compiler plugin enforces Java 1.6 compatibility and activates annotation 
+				processors -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
