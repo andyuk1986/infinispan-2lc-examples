@@ -20,7 +20,7 @@ As Infinispan is the default cache container in JBoss AS7, it allows to configur
   1. You can use the default configuration provided by AS7.
   2. You can create your own infinispan configuration for 2LC.
 
-Building and deploying to JBoss AS 7
+Configuring app for JBoss AS7
 ------------------------------------
 
 1) Prepare your MySQL DB:
@@ -79,19 +79,56 @@ Building and deploying to JBoss AS 7
 
     `$JBOSS_HOME/bin/standalone.sh -c standalone-ha.xml`
 
-4) Build and deploy the application
+4) Depending on how you want to use Infinispan 2LC the configuration is different. You can find the configurations for
+   Jboss AS defaults under $PROJECT_HOME/src/as7-default-configuration/resources folder and for using own Infinispan
+   configuration under $PROJECT_HOME/src/as7-own-configuration/resources.
 
-    `mvn clean package jboss-as:deploy`
+
+Running App using JBoss AS7 Infinispan Default configuration
+------------------------------------------------------------
+
+1. For building and running app using Infinispan defaults, build and deploy the application with command:
+
+    `mvn clean package jboss-as:deploy -Pjbossas-default-configuration`
+
+    Note: in this case no infinispan configuration file is needed, as the application uses the infinispan-config.xml located
+    in hibernate-infinispan.jar.
 
 5) Go to http://localhost:8080/iBook
 
 6) If you want to see 2LC working on the cluster and replicated 2LC, then start the second instance of JBoss, using:
    `$JBOSS_HOME/bin/standalone.sh -c standalone-ha.xml -Djboss.socket.binding.port-offset=100 -Djboss.node.name=node1`
 
-7) Uncomment the following part in pom.xml and deploy application using the mvn command above:
-   `<configuration>
-        <port>10099</port>
-    </configuration>`
+7) Change the value of property jboss-as-management-port from 9999 to 10099 for deploying app on the second node.
+
+8) Go to http://localhost:8180/iBook
+
+9) If you want to check whether the 2LC was used for the second node and the database was not hit, follow this steps:
+   9.1. Open http://localhost:9990/console/index.html (if you haven't created user yet, follow the instructions on the appeared page);
+   9.2. The go to JPA (You'll see the application deployed and View link there) -> (View->). Here you can find Second level
+        cache tab and Queries tab, where you can see the number of puts, misses and hits.
+   9.2. If you will enter to http://localhost:10090/console/index.html (the CLI for second Jboss instance) and will see the
+        same statistics, you will see that only hits count is increasing, the number of puts and misses is 0 which means the 2LC
+        has been used.
+
+
+Running App using Infinispan User defined configuration
+------------------------------------------------------------
+
+1. For building and running app using Infinispan defaults, build and deploy the application with command:
+
+    `mvn clean package jboss-as:deploy -Pjbossas-own-configuration`
+
+    Note: in this case the application will use infinispan-config.xml located in as7-own-configuration directory, as well
+    as the jgroups-tcp.xml for providing clustering of 2LC between nodes. The configurations of properties in persistence.xml
+    are also changed.
+
+5) Go to http://localhost:8080/iBook
+
+6) If you want to see 2LC working on the cluster and replicated 2LC, then start the second instance of JBoss, using:
+   `$JBOSS_HOME/bin/standalone.sh -c standalone-ha.xml -Djboss.socket.binding.port-offset=100 -Djboss.node.name=node1`
+
+7) Change the value of property jboss-as-management-port from 9999 to 10099 for deploying app on the second node.
 
 8) Go to http://localhost:8180/iBook
 
