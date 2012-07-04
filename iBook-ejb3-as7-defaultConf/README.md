@@ -86,7 +86,7 @@ Building and deploying to JBoss AS 7
 5) Go to http://localhost:8080/iBook
 
 6) If you want to see 2LC working on the cluster and replicated 2LC, then start the second instance of JBoss, using:
-   `$JBOSS_HOME/bin/standalone.sh -c standalone-ha.xml -Djboss.socket.binding.port-offset=100`
+   `$JBOSS_HOME/bin/standalone.sh -c standalone-ha.xml -Djboss.socket.binding.port-offset=100 -Djboss.node.name=node1`
 
 7) Uncomment the following part in pom.xml and deploy application using the mvn command above:
    `<configuration>
