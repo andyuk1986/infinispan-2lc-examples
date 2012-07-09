@@ -30,7 +30,7 @@ of two different instances of tomcat accordingly.
 
 5. Create MySQL datasource in Tomcat context.xml (see $PROJECT_HOME/context.xml):
 
-    ` <Resource name="jdbc/iBook" auth="Container" type="javax.sql.DataSource"
+    `<Resource name="jdbc/iBook" auth="Container" type="javax.sql.DataSource"
                    maxActive="100" maxIdle="30" maxWait="10000"
                    username="root" password="" driverClassName="com.mysql.jdbc.Driver"
                    url="jdbc:mysql://localhost:3306/iBook"/>`
