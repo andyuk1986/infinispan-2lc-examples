@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+
+        <property name="hibernate.connection.datasource">java:/comp/env/jdbc/iBook</property>
+
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="show_sql">true</property>
+
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+
+        <property name="hibernate.cache.region.factory_class">
+			org.hibernate.cache.infinispan.InfinispanRegionFactory
+		</property>
+        <property name="hibernate.cache.infinispan.cfg">infinispan-config.xml</property>
+        <!--<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JTATransactionFactory</property>-->
+
+        <!--&lt;!&ndash;<property name="hibernate.jndi.class">org.jnp.interfaces.NamingContextFactory</property>&ndash;&gt;
+        <property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>-->
+
+        <property name="current_session_context_class">thread</property>
+
+        <property name="hibernate.cache.infinispan.entity.cfg">replicated-iBook-entity</property>
+        <property name="hibernate.cache.infinispan.collection.cfg">replicated-iBook-entity</property>
+        <property name="hibernate.cache.infinispan.query.cfg">replicated-iBook-query</property>
+        <property name="hibernate.cache.infinispan.timestamp.cfg">timestamps</property>
+
+
+        <property name="hibernate.cache.infinispan.statistics">true</property>
+        <property name="hibernate.generate_statistics">true</property>
+
+        <property name="hibernate.transaction.auto_close_session">true</property>
+
+		<!-- Names the annotated entity class -->
+		<mapping class="iBook.domain.User" />
+		<mapping class="iBook.domain.Book" />
+		<mapping class="iBook.domain.Category" />
+		<mapping class="iBook.domain.Author" />
+		<mapping class="iBook.domain.UserPayments" />
+		<mapping class="iBook.domain.UserPayments2Books" />
+		<mapping class="iBook.domain.Authors2Books" />
+		<mapping class="iBook.domain.WishBook" />
+	</session-factory>
+</hibernate-configuration>
