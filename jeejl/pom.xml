@@ -33,7 +33,7 @@
     </repositories>
 
     <properties>
-        <deploy.path>C:/apache-tomcat-7.0.23/webapps/</deploy.path>
+        <deploy.path>/usr/share/apache-tomcat-7.0.27/webapps/</deploy.path>
     </properties>
 
     <dependencies>
