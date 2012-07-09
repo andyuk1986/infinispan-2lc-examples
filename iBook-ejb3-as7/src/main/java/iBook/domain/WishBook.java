@@ -21,15 +21,13 @@ import java.io.Serializable;
                 @NamedQuery(
                         name = "listWishList",
                         query = "from WishBook as wb",
-                        hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true"),
-                                @QueryHint(name = "org.hibernate.cacheRegion", value = "replicated-query")
+                        hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true")
                         }
                 ),
                 @NamedQuery(
                         name = "deleteWishList",
                         query = "delete from WishBook as wb where wb.user=:user",
-                        hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true"),
-                                @QueryHint(name = "org.hibernate.cacheRegion", value = "replicated-query")
+                        hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true")
                         }
                 )
         })

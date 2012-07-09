@@ -25,15 +25,13 @@ import org.hibernate.annotations.Cache;
                 @NamedQuery(
                         name = "listByUserName",
                         query = "from User as u where u.userName=:userName",
-                        hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true"),
-                                @QueryHint(name = "org.hibernate.cacheRegion", value = "replicated-query")
+                        hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true")
                         }
                 ),
                 @NamedQuery(
                         name = "listByCredentials",
                         query = "from User as u where u.userName=:userName and u.password=:password",
-                        hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true"),
-                                @QueryHint(name = "org.hibernate.cacheRegion", value = "replicated-query")
+                        hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true")
                         }
                 )
         }

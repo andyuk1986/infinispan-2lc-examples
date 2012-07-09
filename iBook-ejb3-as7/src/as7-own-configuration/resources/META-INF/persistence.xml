@@ -4,7 +4,7 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
              version="1.0">
 
-    <persistence-unit name="iBook">
+    <persistence-unit name="iBook" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/iBook</jta-data-source>
         <jar-file>../lib/iBook.jar</jar-file>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
@@ -18,6 +18,7 @@
 
             <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.infinispan.InfinispanRegionFactory" />
             <property name="hibernate.cache.infinispan.cfg" value="infinispan-config.xml" />
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
 
             <property name="hibernate.cache.infinispan.query.cfg" value="replicated-iBook-query"/>
             <property name="hibernate.cache.infinispan.entity.cfg" value="replicated-iBook-entity"/>

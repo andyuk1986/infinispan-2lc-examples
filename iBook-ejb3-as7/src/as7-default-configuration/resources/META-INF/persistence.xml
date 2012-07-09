@@ -23,7 +23,7 @@
 
             <!-- This line is optional, only if you want to use JBoss Transaction manager lookup.
             The transactions are performed using JTA (by default). No additional staff is needed. -->
-            <property name="hibernate.transaction.manager_lookup" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
 
             <property name="hibernate.cache.infinispan.entity.eviction.strategy" value= "LRU"/>
             <property name="hibernate.cache.infinispan.entity.eviction.wake_up_interval" value= "60000"/>

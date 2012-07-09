@@ -40,7 +40,7 @@
 
     <properties>
         <deploy.path>/usr/share/apache-tomcat-7.0.27/webapps/</deploy.path>
-        <jboss-as-management-port>10099</jboss-as-management-port>
+        <jboss-as-management-port>9999</jboss-as-management-port>
     </properties>
 
     <dependencies>
@@ -97,6 +97,16 @@
             <artifactId>javaee-api</artifactId>
             <version>6.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.jbossts</groupId>
+            <artifactId>jbossjta</artifactId>
+            <version>4.16.4.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 
