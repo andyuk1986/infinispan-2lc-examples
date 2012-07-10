@@ -51,7 +51,7 @@ import org.hibernate.annotations.GenericGenerator;
                 )
         })
 @Table(name = "books")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "barev")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Book implements Serializable {
     private int id;
     private Category category;

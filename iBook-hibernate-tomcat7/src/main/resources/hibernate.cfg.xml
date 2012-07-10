@@ -9,7 +9,6 @@
         <property name="hibernate.connection.datasource">java:/comp/env/jdbc/iBook</property>
 
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="hibernate.current_session_context_class">thread</property>
 		<property name="show_sql">true</property>
 
 		<property name="hibernate.cache.use_second_level_cache">true</property>
@@ -22,8 +21,6 @@
 
         <property name="hibernate.transaction.factory_class">org.hibernate.engine.transaction.internal.jta.JtaTransactionFactory</property>
         <property name="hibernate.transaction.jta.platform">org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform</property>
-
-        <!--<property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>-->
 
         <property name="current_session_context_class">jta</property>
 

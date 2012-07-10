@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "wishbooks")
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL, region="replicated-entry")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @NamedQueries(
         {
                 @NamedQuery(
