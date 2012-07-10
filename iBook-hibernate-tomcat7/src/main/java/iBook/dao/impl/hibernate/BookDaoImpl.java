@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Map;
 
@@ -22,38 +23,41 @@ public class BookDaoImpl implements BookDao {
 
     @Override
 	public Book getBookById(int id) {
-        Session session = Utils.getInstance().openTransaction();
+        UserTransaction tr = Utils.getInstance().openTransaction();
+        Session session = Utils.getInstance().getSession();
         Object book = session.get(Book.class, id);
 
-        Utils.getInstance().commitTransaction(session);
+        Utils.getInstance().commitTransaction(tr);
 
         return (book != null ? (Book) book : null);
 	}
 
     @Override
 	public List<Book> getBooksByAuthorId(Author author) {
-        Session session = Utils.getInstance().openTransaction();
+        UserTransaction tr = Utils.getInstance().openTransaction();
+        Session session = Utils.getInstance().getSession();
 
 		Query query = session.getNamedQuery("listByAuthor");
 		query.setParameter("author", author);
 
 		List<Book> books = query.list();
 
-        Utils.getInstance().commitTransaction(session);
+        Utils.getInstance().commitTransaction(tr);
 
         return books;
 	}
 
     @Override
 	public List<Book> getBooksByCategory(Category category) {
-        Session session = Utils.getInstance().openTransaction();
+        UserTransaction tr = Utils.getInstance().openTransaction();
+        Session session = Utils.getInstance().getSession();
 
         Query query = session.getNamedQuery("listByCategory");
 		query.setParameter("category", category);
 
 		List<Book> books = query.list();
 
-        Utils.getInstance().commitTransaction(session);
+        Utils.getInstance().commitTransaction(tr);
 
         return books;
 	}
@@ -75,7 +79,8 @@ public class BookDaoImpl implements BookDao {
 
     @Override
 	public List<Book> getBooksByCriterias(Map<String, String> criteria) {
-        Session session = Utils.getInstance().openTransaction();
+        UserTransaction tr = Utils.getInstance().openTransaction();
+        Session session = Utils.getInstance().getSession();
 
         Criteria criteriaObj = session.createCriteria(Book.class);
         for(Map.Entry<String, String> cr : criteria.entrySet()) {
@@ -83,13 +88,14 @@ public class BookDaoImpl implements BookDao {
         }
 
         List resultList = criteriaObj.setCacheable(true).list();
-        Utils.getInstance().commitTransaction(session);
+        Utils.getInstance().commitTransaction(tr);
 
         return (List<Book>) resultList;
 	}
 	
 	private List<Book> getBooksByQuery(final String namedQueryName, final int limit) {
-        Session session = Utils.getInstance().openTransaction();
+        UserTransaction tr = Utils.getInstance().openTransaction();
+        Session session = Utils.getInstance().getSession();
 
 		Query query = session.getNamedQuery(namedQueryName);
 		if(limit > 0) {
@@ -98,7 +104,7 @@ public class BookDaoImpl implements BookDao {
 
 		List<Book> books = query.list();
 
-        Utils.getInstance().commitTransaction(session);
+        Utils.getInstance().commitTransaction(tr);
 
         return books;
 	}

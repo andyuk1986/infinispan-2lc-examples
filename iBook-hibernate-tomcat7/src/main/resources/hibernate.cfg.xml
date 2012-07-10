@@ -19,12 +19,13 @@
 			org.hibernate.cache.infinispan.InfinispanRegionFactory
 		</property>
         <property name="hibernate.cache.infinispan.cfg">infinispan-config.xml</property>
-        <!--<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JTATransactionFactory</property>-->
 
-        <!--&lt;!&ndash;<property name="hibernate.jndi.class">org.jnp.interfaces.NamingContextFactory</property>&ndash;&gt;
-        <property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>-->
+        <property name="hibernate.transaction.factory_class">org.hibernate.engine.transaction.internal.jta.JtaTransactionFactory</property>
+        <property name="hibernate.transaction.jta.platform">org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform</property>
 
-        <property name="current_session_context_class">thread</property>
+        <!--<property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>-->
+
+        <property name="current_session_context_class">jta</property>
 
         <property name="hibernate.cache.infinispan.entity.cfg">replicated-iBook-entity</property>
         <property name="hibernate.cache.infinispan.collection.cfg">replicated-iBook-entity</property>

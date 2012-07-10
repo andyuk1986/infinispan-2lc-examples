@@ -6,6 +6,8 @@ import iBook.domain.UserPayments;
 import iBook.utils.Utils;
 import org.hibernate.Session;
 
+import javax.transaction.UserTransaction;
+
 /**
  * UserPayment Dao Hibernate implementation.
  */
@@ -17,10 +19,11 @@ public class UserPaymentDaoImpl implements UserPaymentDao {
      */
     @Override
 	public void saveUserPayments(UserPayments payments) {
-        Session session = Utils.getInstance().openTransaction();
+        UserTransaction tr = Utils.getInstance().openTransaction();
+        Session session = Utils.getInstance().getSession();
 
 		session.persist(payments);
 
-        Utils.getInstance().commitTransaction(session);
+        Utils.getInstance().commitTransaction(tr);
 	}
 }

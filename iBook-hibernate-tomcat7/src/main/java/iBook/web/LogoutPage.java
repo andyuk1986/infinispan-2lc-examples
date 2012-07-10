@@ -16,11 +16,10 @@ public class LogoutPage extends Page {
      */
 	public void logout() throws Exception {
         User user = (User) session.getAttribute(LOGGED_IN_USER);
-        //Utils.getInstance().getBookWishList(session).finishWishList();
+        Utils.getInstance().getBookWishList(session).finishWishList();
 
         session.invalidate();
 
-        //Utils.getBookWishList().closeSession();
 		response.sendRedirect(INDEX_URL);
 	}
 

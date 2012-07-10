@@ -45,6 +45,11 @@ of two different instances of tomcat accordingly.
 
        `username: root`
 
+8. For enabling Transactions, add following lines to your context.xml:
+
+    `<Resource name="UserTransaction" auth="Container" type="com.arjuna.ats.jta.UserTransaction"/>
+     <Transaction factory="com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple"/>`
+
 
 Deploying application
 ------------------------------------

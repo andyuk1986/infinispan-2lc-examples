@@ -1,36 +1,39 @@
 package iBook.utils;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
-
-import iBook.dao.CategoryDao;
-import iBook.dao.UserDao;
-import iBook.dao.UserPaymentDao;
+import iBook.dao.BookDao;
 import iBook.dao.factory.DaoFactory;
+import iBook.dao.statefull.BookWishList;
+import iBook.dao.statefull.BookWishListBean;
 import iBook.domain.Book;
 import iBook.domain.User;
-import iBook.dao.statefull.BookWishList;
-import iBook.dao.BookDao;
 import iBook.web.Page;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.cache.infinispan.InfinispanRegionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.internal.SessionFactoryImpl;
+import org.infinispan.Cache;
+import org.infinispan.manager.EmbeddedCacheManager;
+
+import javax.naming.InitialContext;
+import javax.servlet.http.HttpSession;
+import javax.transaction.SystemException;
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
+import java.io.IOException;
 
 /**
  * Utility class for working with books and wishlist.
  */
 public final class Utils {
     private static Utils instance = null;
-    private InitialContext ctx = null;
-    private static final SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory = null;
+    private EmbeddedCacheManager cacheManager;
 
     static {
         try {
-            // Create the SessionFactory from hibernate.cfg.xml
             sessionFactory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable ex) {
-            // Make sure you log the exception, as it might be swallowed
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
@@ -45,11 +48,14 @@ public final class Utils {
         return instance;
     }
 
-    private InitialContext getInitialContext() throws NamingException {
-        if(ctx == null) {
-            ctx = new InitialContext();
+    public EmbeddedCacheManager getCacheManager() throws IOException {
+        if(cacheManager == null) {
+            SessionFactoryImpl sessionFactoryImpl = (SessionFactoryImpl) getSessionFactory();
+            InfinispanRegionFactory regionFactory = (InfinispanRegionFactory) sessionFactoryImpl.getSettings().getRegionFactory();
+            cacheManager = regionFactory.getCacheManager();
         }
-        return ctx;
+
+        return cacheManager;
     }
 
     /**
@@ -57,16 +63,23 @@ public final class Utils {
      * @return      the wishlist statefull session bean.
      */
     public BookWishList getBookWishList(HttpSession session) {
-        BookWishList wishList = (BookWishList) session.getAttribute("wishList");
-        if (wishList== null) {
-            try {
-                wishList = (BookWishList) getInitialContext().lookup("java:global/iBook/BookWishListBean!iBook.dao.statefull.BookWishList");
-                wishList.init((User)session.getAttribute(Page.LOGGED_IN_USER));
+        BookWishList wishList = null;
+        try {
+            User user = (User) session.getAttribute(Page.LOGGED_IN_USER);
+            wishList = (BookWishList) getCacheManager().getCache("sfsb").get("wishList" + user.getId());
+            if (wishList== null) {
 
-                session.setAttribute("wishList", wishList);
-            } catch (NamingException e) {
-                e.printStackTrace();
+                wishList = new BookWishListBean();
+                wishList.init(user);
+
+                Cache cache = getCacheManager().getCache("sfsb");
+                TransactionManager tm = cache.getAdvancedCache().getTransactionManager();
+                tm.begin();
+                cache.put("wishList" + user.getId(), wishList);
+                tm.commit();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return wishList;
     }
@@ -101,14 +114,28 @@ public final class Utils {
         return session;
     }
 
-    public Session openTransaction() {
-        Session session = getSession();
-        session.beginTransaction();
+    public UserTransaction openTransaction() {
+        UserTransaction tx = null;
+        try {
+            tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+            tx.begin();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return session;
+        return tx;
     }
 
-    public void commitTransaction(final Session session) {
-        session.getTransaction().commit();
+    public void commitTransaction(final UserTransaction tx) {
+        try {
+            tx.commit();
+        } catch (Exception e) {
+            try {
+                tx.rollback();
+            } catch (SystemException e1) {
+                System.out.println("Transaction rollback is failed!!!" + e1);
+            }
+            e.printStackTrace();
+        }
     }
 }

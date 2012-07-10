@@ -37,5 +37,5 @@ public interface BookWishList {
     /**
      * Removes the wishlist of the user on logout.
      */
-    @Remove public void finishWishList();
+    public void finishWishList();
 }

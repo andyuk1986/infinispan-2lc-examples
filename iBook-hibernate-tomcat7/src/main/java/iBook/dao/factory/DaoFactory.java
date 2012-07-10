@@ -4,11 +4,7 @@ import iBook.dao.*;
 import iBook.dao.impl.hibernate.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: anna.manukyan
- * Date: 6/20/12
- * Time: 3:25 PM
- * To change this template use File | Settings | File Templates.
+ * Factory class for getting access to all DAOs.
  */
 public final class DaoFactory {
     private static DaoFactory instance;
@@ -22,6 +18,10 @@ public final class DaoFactory {
 
     }
 
+    /**
+     * Returns single instance of this class.
+     * @return      single intance of this class.
+     */
     public static DaoFactory getInstance() {
         if(instance == null) {
             instance = new DaoFactory();
@@ -30,6 +30,10 @@ public final class DaoFactory {
         return instance;
     }
 
+    /**
+     * Returns the instance of book dao,
+     * @return      the instance of book dao.
+     */
     public BookDao getBookDao() {
         if(bookDao == null) {
             bookDao = new BookDaoImpl();
@@ -38,6 +42,10 @@ public final class DaoFactory {
         return bookDao;
     }
 
+    /**
+     * Returns the instance of category dao.
+     * @return      the instance of category dao.
+     */
     public CategoryDao getCategoryDao() {
         if(categoryDao == null) {
             categoryDao = new CategoryDaoImpl();
@@ -46,6 +54,10 @@ public final class DaoFactory {
         return categoryDao;
     }
 
+    /**
+     * Returns the instance of user dao.
+     * @return      the instance of user dao.
+     */
     public UserDao getUserDao() {
         if(userDao == null) {
             userDao = new UserDaoImpl();
@@ -54,6 +66,10 @@ public final class DaoFactory {
         return userDao;
     }
 
+    /**
+     * Returns the instance of user payment dao instance.
+     * @return      the instance of user payment dao.
+     */
     public UserPaymentDao getUserPaymentDao() {
         if(userPaymentDao == null) {
             userPaymentDao = new UserPaymentDaoImpl();
@@ -62,6 +78,10 @@ public final class DaoFactory {
         return userPaymentDao;
     }
 
+    /**
+     * Returns the instance of wishbook dao instance.
+     * @return      the instance of wish book instance.
+     */
     public WishBookDao getWishBookDao() {
         if(wishBookDao == null) {
             wishBookDao = new WishBookDaoImpl();
